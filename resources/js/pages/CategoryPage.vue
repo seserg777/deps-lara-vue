@@ -1,31 +1,60 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { RouterLink, useRoute } from 'vue-router';
-import { fetchCategoryChildren, type CategoryItem } from '@/api/catalogClient';
+import { ref, watch } from 'vue';
+import { RouterLink } from 'vue-router';
+import {
+    categoryPathFromIds,
+    fetchCategoryChildren,
+    parseCategoryPathParam,
+    type CategoryItem,
+} from '@/api/catalogClient';
 
 const props = defineProps<{
-    id: string;
+    pathMatch?: string | string[];
 }>();
 
-const route = useRoute();
 const parent = ref<CategoryItem | null>(null);
+const breadcrumb = ref<CategoryItem[]>([]);
 const children = ref<CategoryItem[]>([]);
 const loading = ref(true);
 const error_message = ref<string | null>(null);
+const not_found = ref(false);
+
+function ids_equal(a: number[], b: number[]): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+
+    return a.every((v, i) => v === b[i]);
+}
 
 async function load(): Promise<void> {
-    const id = Number(props.id);
-    if (Number.isNaN(id)) {
-        error_message.value = 'Invalid category';
+    not_found.value = false;
+    error_message.value = null;
+    const url_ids = parseCategoryPathParam(props.pathMatch);
+    if (url_ids === null) {
+        not_found.value = true;
         loading.value = false;
+        parent.value = null;
+        breadcrumb.value = [];
+        children.value = [];
 
         return;
     }
+    const last_id = url_ids[url_ids.length - 1];
     loading.value = true;
-    error_message.value = null;
     try {
-        const res = await fetchCategoryChildren(id);
+        const res = await fetchCategoryChildren(last_id);
+        const canonical_ids = res.breadcrumb.map((b) => b.id);
+        if (!ids_equal(url_ids, canonical_ids)) {
+            not_found.value = true;
+            parent.value = null;
+            breadcrumb.value = [];
+            children.value = [];
+
+            return;
+        }
         parent.value = res.parent;
+        breadcrumb.value = res.breadcrumb;
         children.value = res.children;
     } catch (e) {
         error_message.value = e instanceof Error ? e.message : 'Failed to load';
@@ -34,12 +63,12 @@ async function load(): Promise<void> {
     }
 }
 
-onMounted(load);
 watch(
-    () => route.params.id,
+    () => props.pathMatch,
     () => {
         void load();
     },
+    { immediate: true },
 );
 </script>
 
@@ -52,14 +81,31 @@ watch(
             >
                 Home
             </RouterLink>
-            <span class="mx-2">/</span>
-            <span class="text-gray-900 dark:text-white">{{ parent?.title ?? 'Category' }}</span>
+            <template
+                v-for="(seg, idx) in breadcrumb"
+                :key="seg.id"
+            >
+                <span class="mx-2">/</span>
+                <RouterLink
+                    v-if="idx < breadcrumb.length - 1"
+                    :to="categoryPathFromIds(breadcrumb.slice(0, idx + 1).map((s) => s.id))"
+                    class="text-blue-600 hover:underline dark:text-blue-400"
+                >
+                    {{ seg.title }}
+                </RouterLink>
+                <span
+                    v-else
+                    class="text-gray-900 dark:text-white"
+                >{{ seg.title }}</span>
+            </template>
         </nav>
 
-        <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-            {{ parent?.title ?? 'Category' }}
-        </h1>
-        <p class="mb-6 text-gray-600 dark:text-gray-400">Subcategories</p>
+        <template v-if="!not_found">
+            <h1 class="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
+                {{ parent?.title ?? 'Category' }}
+            </h1>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">Subcategories</p>
+        </template>
 
         <div
             v-if="loading"
@@ -90,6 +136,13 @@ watch(
         </div>
 
         <div
+            v-else-if="not_found"
+            class="rounded-lg border border-gray-200 bg-white p-6 text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+        >
+            Category not found.
+        </div>
+
+        <div
             v-else-if="error_message"
             class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-red-900/20 dark:text-red-200"
         >
@@ -110,7 +163,7 @@ watch(
             <RouterLink
                 v-for="c in children"
                 :key="c.id"
-                :to="{ name: 'category', params: { id: c.id } }"
+                :to="categoryPathFromIds([...breadcrumb.map((b) => b.id), c.id])"
                 class="block max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
             >
                 <h2 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">

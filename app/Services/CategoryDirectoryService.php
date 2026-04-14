@@ -23,7 +23,7 @@ class CategoryDirectoryService
     }
 
     /**
-     * @return array{parent: array{id:int, title:string}|null, children: list<array{id:int, title:string}>}
+     * @return array{parent: array{id:int, title:string}|null, breadcrumb: list<array{id:int, title:string}>, children: list<array{id:int, title:string}>}
      */
     public function childrenOf(int $category_id): array
     {
@@ -37,8 +37,40 @@ class CategoryDirectoryService
 
         return [
             'parent' => $parent !== null ? ['id' => $parent['id'], 'title' => $parent['title']] : null,
+            'breadcrumb' => $this->breadcrumbPath($by_id, $category_id),
             'children' => $this->mapPublicList($children),
         ];
+    }
+
+    /**
+     * @param  array<int, array{id:int, parent_id:int|null, title:string}>  $by_id
+     * @return list<array{id:int, title:string}>
+     */
+    private function breadcrumbPath(array $by_id, int $category_id): array
+    {
+        if (! isset($by_id[$category_id])) {
+            return [];
+        }
+
+        $segments = [];
+        $id = $category_id;
+        for ($guard = 0; $guard < 1000; $guard++) {
+            $row = $by_id[$id];
+            array_unshift($segments, [
+                'id' => $row['id'],
+                'title' => $row['title'],
+            ]);
+            $pid = $row['parent_id'];
+            if ($pid === null || $pid === 0) {
+                break;
+            }
+            if (! isset($by_id[$pid])) {
+                break;
+            }
+            $id = $pid;
+        }
+
+        return $segments;
     }
 
     /**
