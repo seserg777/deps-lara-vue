@@ -1,0 +1,34 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - heading "Let's get started" [level=1] [ref=e5]
+    - paragraph [ref=e6]:
+      - text: With so many options available to you,
+      - text: "we suggest you start with the following:"
+    - list [ref=e7]:
+      - listitem [ref=e8]:
+        - generic [ref=e12]:
+          - text: Read the
+          - link "Documentation" [ref=e13] [cursor=pointer]:
+            - /url: https://laravel.com/docs
+            - generic [ref=e14]: Documentation
+            - img [ref=e15]
+      - listitem [ref=e17]:
+        - generic [ref=e21]:
+          - text: Watch video tutorials at
+          - link "Laracasts" [ref=e22] [cursor=pointer]:
+            - /url: https://laracasts.com
+            - generic [ref=e23]: Laracasts
+            - img [ref=e24]
+    - list [ref=e26]:
+      - listitem [ref=e27]:
+        - link "Deploy now" [ref=e28] [cursor=pointer]:
+          - /url: https://cloud.laravel.com
+    - paragraph [ref=e29]:
+      - text: v13.5.0
+      - link "View changelog" [ref=e30] [cursor=pointer]:
+        - /url: https://github.com/laravel/laravel/blob/13.x/CHANGELOG.md
+        - generic [ref=e31]: View changelog
+        - img [ref=e32]
+  - generic [ref=e34]:
+    - img [ref=e35]
+    - img [ref=e43]
