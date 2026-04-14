@@ -1,0 +1,169 @@
+- generic [active] [ref=e1]:
+  - heading "Index of /" [level=1] [ref=e2]
+  - table [ref=e3]:
+    - rowgroup [ref=e4]:
+      - row "[ICO] Name Last modified Size Description" [ref=e5]:
+        - columnheader "[ICO]" [ref=e6]:
+          - img "[ICO]" [ref=e7]
+        - columnheader "Name" [ref=e8]:
+          - link "Name" [ref=e9] [cursor=pointer]:
+            - /url: "?C=N;O=D"
+        - columnheader "Last modified" [ref=e10]:
+          - link "Last modified" [ref=e11] [cursor=pointer]:
+            - /url: "?C=M;O=A"
+        - columnheader "Size" [ref=e12]:
+          - link "Size" [ref=e13] [cursor=pointer]:
+            - /url: "?C=S;O=A"
+        - columnheader "Description" [ref=e14]:
+          - link "Description" [ref=e15] [cursor=pointer]:
+            - /url: "?C=D;O=A"
+      - row [ref=e16]:
+        - columnheader [ref=e17]:
+          - separator [ref=e18]
+      - row "[DIR] app/ 2026-04-14 21:22 -" [ref=e19]:
+        - cell "[DIR]" [ref=e20]:
+          - img "[DIR]" [ref=e21]
+        - cell "app/" [ref=e22]:
+          - link "app/" [ref=e23] [cursor=pointer]:
+            - /url: app/
+        - cell "2026-04-14 21:22" [ref=e24]
+        - cell "-" [ref=e25]
+        - cell [ref=e26]
+      - row "[ ] artisan 2026-04-09 06:35 425" [ref=e27]:
+        - cell "[ ]" [ref=e28]:
+          - img "[ ]" [ref=e29]
+        - cell "artisan" [ref=e30]:
+          - link "artisan" [ref=e31] [cursor=pointer]:
+            - /url: artisan
+        - cell "2026-04-09 06:35" [ref=e32]
+        - cell "425" [ref=e33]
+        - cell [ref=e34]
+      - row "[DIR] bootstrap/ 2026-04-14 21:22 -" [ref=e35]:
+        - cell "[DIR]" [ref=e36]:
+          - img "[DIR]" [ref=e37]
+        - cell "bootstrap/" [ref=e38]:
+          - link "bootstrap/" [ref=e39] [cursor=pointer]:
+            - /url: bootstrap/
+        - cell "2026-04-14 21:22" [ref=e40]
+        - cell "-" [ref=e41]
+        - cell [ref=e42]
+      - row "[ ] composer.json 2026-04-09 06:35 2.8K" [ref=e43]:
+        - cell "[ ]" [ref=e44]:
+          - img "[ ]" [ref=e45]
+        - cell "composer.json" [ref=e46]:
+          - link "composer.json" [ref=e47] [cursor=pointer]:
+            - /url: composer.json
+        - cell "2026-04-09 06:35" [ref=e48]
+        - cell "2.8K" [ref=e49]
+        - cell [ref=e50]
+      - row "[ ] composer.lock 2026-04-14 21:22 294K" [ref=e51]:
+        - cell "[ ]" [ref=e52]:
+          - img "[ ]" [ref=e53]
+        - cell "composer.lock" [ref=e54]:
+          - link "composer.lock" [ref=e55] [cursor=pointer]:
+            - /url: composer.lock
+        - cell "2026-04-14 21:22" [ref=e56]
+        - cell "294K" [ref=e57]
+        - cell [ref=e58]
+      - row "[DIR] config/ 2026-04-14 21:22 -" [ref=e59]:
+        - cell "[DIR]" [ref=e60]:
+          - img "[DIR]" [ref=e61]
+        - cell "config/" [ref=e62]:
+          - link "config/" [ref=e63] [cursor=pointer]:
+            - /url: config/
+        - cell "2026-04-14 21:22" [ref=e64]
+        - cell "-" [ref=e65]
+        - cell [ref=e66]
+      - row "[DIR] database/ 2026-04-14 21:23 -" [ref=e67]:
+        - cell "[DIR]" [ref=e68]:
+          - img "[DIR]" [ref=e69]
+        - cell "database/" [ref=e70]:
+          - link "database/" [ref=e71] [cursor=pointer]:
+            - /url: database/
+        - cell "2026-04-14 21:23" [ref=e72]
+        - cell "-" [ref=e73]
+        - cell [ref=e74]
+      - row "[ ] package.json 2026-04-09 06:35 386" [ref=e75]:
+        - cell "[ ]" [ref=e76]:
+          - img "[ ]" [ref=e77]
+        - cell "package.json" [ref=e78]:
+          - link "package.json" [ref=e79] [cursor=pointer]:
+            - /url: package.json
+        - cell "2026-04-09 06:35" [ref=e80]
+        - cell "386" [ref=e81]
+        - cell [ref=e82]
+      - row "[ ] phpunit.xml 2026-04-09 06:35 1.3K" [ref=e83]:
+        - cell "[ ]" [ref=e84]:
+          - img "[ ]" [ref=e85]
+        - cell "phpunit.xml" [ref=e86]:
+          - link "phpunit.xml" [ref=e87] [cursor=pointer]:
+            - /url: phpunit.xml
+        - cell "2026-04-09 06:35" [ref=e88]
+        - cell "1.3K" [ref=e89]
+        - cell [ref=e90]
+      - row "[DIR] public/ 2026-04-09 06:35 -" [ref=e91]:
+        - cell "[DIR]" [ref=e92]:
+          - img "[DIR]" [ref=e93]
+        - cell "public/" [ref=e94]:
+          - link "public/" [ref=e95] [cursor=pointer]:
+            - /url: public/
+        - cell "2026-04-09 06:35" [ref=e96]
+        - cell "-" [ref=e97]
+        - cell [ref=e98]
+      - row "[DIR] resources/ 2026-04-14 21:22 -" [ref=e99]:
+        - cell "[DIR]" [ref=e100]:
+          - img "[DIR]" [ref=e101]
+        - cell "resources/" [ref=e102]:
+          - link "resources/" [ref=e103] [cursor=pointer]:
+            - /url: resources/
+        - cell "2026-04-14 21:22" [ref=e104]
+        - cell "-" [ref=e105]
+        - cell [ref=e106]
+      - row "[DIR] routes/ 2026-04-14 21:22 -" [ref=e107]:
+        - cell "[DIR]" [ref=e108]:
+          - img "[DIR]" [ref=e109]
+        - cell "routes/" [ref=e110]:
+          - link "routes/" [ref=e111] [cursor=pointer]:
+            - /url: routes/
+        - cell "2026-04-14 21:22" [ref=e112]
+        - cell "-" [ref=e113]
+        - cell [ref=e114]
+      - row "[DIR] storage/ 2026-04-14 21:22 -" [ref=e115]:
+        - cell "[DIR]" [ref=e116]:
+          - img "[DIR]" [ref=e117]
+        - cell "storage/" [ref=e118]:
+          - link "storage/" [ref=e119] [cursor=pointer]:
+            - /url: storage/
+        - cell "2026-04-14 21:22" [ref=e120]
+        - cell "-" [ref=e121]
+        - cell [ref=e122]
+      - row "[DIR] tests/ 2026-04-14 21:22 -" [ref=e123]:
+        - cell "[DIR]" [ref=e124]:
+          - img "[DIR]" [ref=e125]
+        - cell "tests/" [ref=e126]:
+          - link "tests/" [ref=e127] [cursor=pointer]:
+            - /url: tests/
+        - cell "2026-04-14 21:22" [ref=e128]
+        - cell "-" [ref=e129]
+        - cell [ref=e130]
+      - row "[DIR] vendor/ 2026-04-14 21:23 -" [ref=e131]:
+        - cell "[DIR]" [ref=e132]:
+          - img "[DIR]" [ref=e133]
+        - cell "vendor/" [ref=e134]:
+          - link "vendor/" [ref=e135] [cursor=pointer]:
+            - /url: vendor/
+        - cell "2026-04-14 21:23" [ref=e136]
+        - cell "-" [ref=e137]
+        - cell [ref=e138]
+      - row "[ ] vite.config.js 2026-04-09 06:35 436" [ref=e139]:
+        - cell "[ ]" [ref=e140]:
+          - img "[ ]" [ref=e141]
+        - cell "vite.config.js" [ref=e142]:
+          - link "vite.config.js" [ref=e143] [cursor=pointer]:
+            - /url: vite.config.js
+        - cell "2026-04-09 06:35" [ref=e144]
+        - cell "436" [ref=e145]
+        - cell [ref=e146]
+      - row [ref=e147]:
+        - columnheader [ref=e148]:
+          - separator [ref=e149]
