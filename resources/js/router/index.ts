@@ -6,6 +6,12 @@ export const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/', name: 'home', component: HomePage },
-        { path: '/categories/:id', name: 'category', component: CategoryPage, props: true },
+        { path: '/categories', redirect: '/' },
+        {
+            path: '/categories/:pathMatch(.+)',
+            name: 'category',
+            component: CategoryPage,
+            props: true,
+        },
     ],
 });

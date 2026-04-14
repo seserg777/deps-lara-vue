@@ -27,6 +27,7 @@ class CategoryController extends Controller
             'data' => $payload['children'],
             'meta' => [
                 'parent' => $payload['parent'],
+                'breadcrumb' => $payload['breadcrumb'],
             ],
         ]);
     }

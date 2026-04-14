@@ -112,7 +112,19 @@ class CatalogCategoryApiTest extends TestCase
         $response->assertOk()
             ->assertJsonPath('meta.parent.id', 10)
             ->assertJsonPath('meta.parent.title', 'Alpha')
+            ->assertJsonPath('meta.breadcrumb.0.id', 1)
+            ->assertJsonPath('meta.breadcrumb.0.title', 'Root')
+            ->assertJsonPath('meta.breadcrumb.1.id', 10)
+            ->assertJsonPath('meta.breadcrumb.1.title', 'Alpha')
             ->assertJsonPath('data.0.id', 11)
             ->assertJsonPath('data.0.title', 'Beta');
+
+        $nested = $this->getJson('/api/catalog/categories/11');
+
+        $nested->assertOk()
+            ->assertJsonPath('meta.breadcrumb.0.id', 1)
+            ->assertJsonPath('meta.breadcrumb.1.id', 10)
+            ->assertJsonPath('meta.breadcrumb.2.id', 11)
+            ->assertJsonPath('meta.breadcrumb.2.title', 'Beta');
     }
 }

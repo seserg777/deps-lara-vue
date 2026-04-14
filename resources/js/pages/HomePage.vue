@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import { fetchRootCategories, type CategoryItem } from '@/api/catalogClient';
+import { categoryPathFromIds, fetchRootCategories, type CategoryItem } from '@/api/catalogClient';
 
 const items = ref<CategoryItem[]>([]);
 const loading = ref(true);
@@ -67,7 +67,7 @@ onMounted(async () => {
             <RouterLink
                 v-for="c in items"
                 :key="c.id"
-                :to="{ name: 'category', params: { id: c.id } }"
+                :to="categoryPathFromIds([c.id])"
                 class="block max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
             >
                 <h2 class="mb-2 text-lg font-semibold tracking-tight text-gray-900 dark:text-white">
