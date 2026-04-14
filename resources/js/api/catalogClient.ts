@@ -84,3 +84,64 @@ export async function fetchCategoryChildren(id: number): Promise<{
         children: body.data,
     };
 }
+
+export type ProductListItem = {
+    id: number;
+    title: string;
+    price: number | string | null;
+    image_url: string | null;
+};
+
+export type CategoryProductsResponse = {
+    data: ProductListItem[];
+    meta: {
+        current_page: number;
+        per_page: number;
+        has_more: boolean;
+    };
+};
+
+export async function fetchCategoryProducts(category_id: number, page: number = 1): Promise<CategoryProductsResponse> {
+    const params = new URLSearchParams({ page: String(page) });
+    const res = await fetch(`${base}/categories/${category_id}/products?${params}`, {
+        headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as { message?: string }).message ?? `HTTP ${res.status}`);
+    }
+
+    return (await res.json()) as CategoryProductsResponse;
+}
+
+export type ProductSearchMeta = {
+    limit: number;
+    query: string;
+};
+
+export type SearchProductsResponse = {
+    data: ProductListItem[];
+    meta: ProductSearchMeta;
+};
+
+export type SearchProductsOptions = {
+    signal?: AbortSignal;
+};
+
+export async function searchProducts(
+    q: string,
+    limit: number = 10,
+    options?: SearchProductsOptions,
+): Promise<SearchProductsResponse> {
+    const params = new URLSearchParams({ q, limit: String(limit) });
+    const res = await fetch(`${base}/search?${params}`, {
+        headers: { Accept: 'application/json' },
+        signal: options?.signal,
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as { message?: string }).message ?? `HTTP ${res.status}`);
+    }
+
+    return (await res.json()) as SearchProductsResponse;
+}
