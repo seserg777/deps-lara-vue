@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue';
 import { RouterView } from 'vue-router';
+import HeaderCart from '@/components/HeaderCart.vue';
 import HeaderSearch from '@/components/HeaderSearch.vue';
 
 const toast_message = ref<string | null>(null);
@@ -36,7 +37,12 @@ onUnmounted(() => {
                 >
                     Catalog
                 </RouterLink>
-                <HeaderSearch @show-toast="onShowToast" />
+                <div
+                    class="flex w-full min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3"
+                >
+                    <HeaderSearch @show-toast="onShowToast" />
+                    <HeaderCart />
+                </div>
             </nav>
         </header>
         <div

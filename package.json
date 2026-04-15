@@ -17,6 +17,7 @@
     "dependencies": {
         "@vue/tsconfig": "^0.8.1",
         "flowbite": "^3.1.2",
+        "pinia": "^3.0.4",
         "typescript": "^5.9.3",
         "vue": "^3.5.32",
         "vue-router": "^4.6.4",
