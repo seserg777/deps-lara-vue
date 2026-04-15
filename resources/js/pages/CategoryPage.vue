@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, watchPostEffect } from 'vue';
 import { RouterLink } from 'vue-router';
+import ProductGrid from '@/components/ProductGrid.vue';
 import {
     categoryPathFromIds,
     fetchCategoryChildren,
@@ -44,17 +45,6 @@ function reset_products(): void {
     products_error.value = null;
     products_has_more.value = false;
     products_page_loaded.value = 0;
-}
-
-function format_price(price: number | string | null): string {
-    if (price === null || price === '') {
-        return '—';
-    }
-    if (typeof price === 'number') {
-        return Number.isFinite(price) ? price.toFixed(2) : '—';
-    }
-
-    return price;
 }
 
 function ids_equal(a: number[], b: number[]): boolean {
@@ -303,35 +293,10 @@ watch(
                     No products in this category.
                 </div>
 
-                <div
+                <ProductGrid
                     v-else
-                    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-                >
-                    <article
-                        v-for="p in products"
-                        :key="p.id"
-                        class="flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800"
-                    >
-                        <div class="aspect-square bg-gray-100 dark:bg-gray-900">
-                            <img
-                                v-if="p.image_url"
-                                :src="p.image_url"
-                                :alt="p.title"
-                                class="h-full w-full object-cover"
-                                loading="lazy"
-                                decoding="async"
-                            >
-                        </div>
-                        <div class="flex flex-1 flex-col p-4">
-                            <h2 class="mb-2 line-clamp-2 text-base font-semibold text-gray-900 dark:text-white">
-                                {{ p.title }}
-                            </h2>
-                            <p class="mt-auto text-lg font-medium text-gray-900 dark:text-gray-100">
-                                {{ format_price(p.price) }}
-                            </p>
-                        </div>
-                    </article>
-                </div>
+                    :items="products"
+                />
 
                 <div
                     v-if="products_loading_more"
