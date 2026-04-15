@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AddToCartButton from '@/components/AddToCartButton.vue';
 import type { ProductListItem } from '@/api/catalogClient';
 
 const props = defineProps<{
@@ -35,9 +36,12 @@ function format_price(price: number | string | null): string {
             <h2 class="mb-2 line-clamp-2 text-base font-semibold text-gray-900 dark:text-white">
                 {{ props.product.title }}
             </h2>
-            <p class="mt-auto text-lg font-medium text-gray-900 dark:text-gray-100">
-                {{ format_price(props.product.price) }}
-            </p>
+            <div class="mt-auto space-y-2">
+                <p class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    {{ format_price(props.product.price) }}
+                </p>
+                <AddToCartButton :product="props.product" />
+            </div>
         </div>
     </article>
 </template>
