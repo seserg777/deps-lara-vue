@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import { searchProducts, type ProductListItem } from '@/api/catalogClient';
 
 const DEBOUNCE_MS = 300;
 const MIN_CHARS = 2;
+const PREVIEW_LIMIT = 5;
 const LISTBOX_ID = 'header-search-listbox';
 const INPUT_ID = 'header-search-input';
 
@@ -34,6 +36,16 @@ const emit = defineEmits<{
 }>();
 
 const trimmed_query = computed(() => query.value.trim());
+
+const show_more_results = computed(
+    () => results.value.length > PREVIEW_LIMIT,
+);
+
+const visible_results = computed(() =>
+    show_more_results.value
+        ? results.value.slice(0, PREVIEW_LIMIT)
+        : results.value,
+);
 
 const expanded = computed(
     () => panel_open.value && trimmed_query.value.length >= MIN_CHARS,
@@ -122,7 +134,7 @@ function selectProduct(p: ProductListItem): void {
 }
 
 function onKeydown(e: KeyboardEvent): void {
-    const count = results.value.length;
+    const count = visible_results.value.length;
 
     if (e.key === 'Escape') {
         e.preventDefault();
@@ -145,9 +157,9 @@ function onKeydown(e: KeyboardEvent): void {
         e.preventDefault();
         active_index.value = Math.max(active_index.value - 1, -1);
     } else if (e.key === 'Enter') {
-        if (active_index.value >= 0 && results.value[active_index.value]) {
+        if (active_index.value >= 0 && visible_results.value[active_index.value]) {
             e.preventDefault();
-            selectProduct(results.value[active_index.value]);
+            selectProduct(visible_results.value[active_index.value]);
         }
     }
 }
@@ -227,40 +239,57 @@ onUnmounted(() => {
             >
                 <li role="presentation">No products found.</li>
             </ul>
-            <ul
+            <div
                 v-else
-                :id="LISTBOX_ID"
-                role="listbox"
-                class="py-1"
+                class="overflow-hidden rounded-lg"
             >
-                <li
-                    v-for="(p, i) in results"
-                    :id="`header-search-opt-${i}`"
-                    :key="p.id"
-                    role="option"
-                    :aria-selected="active_index === i"
-                    class="flex cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
-                    :class="
-                        active_index === i ? 'bg-gray-100 dark:bg-gray-700' : ''
-                    "
-                    @mousedown.prevent
-                    @click="selectProduct(p)"
+                <ul
+                    :id="LISTBOX_ID"
+                    role="listbox"
+                    class="py-1"
                 >
-                    <div
-                        class="h-12 w-12 shrink-0 overflow-hidden rounded border border-gray-200 bg-gray-100 dark:border-gray-600 dark:bg-gray-900"
+                    <li
+                        v-for="(p, i) in visible_results"
+                        :id="`header-search-opt-${i}`"
+                        :key="p.id"
+                        role="option"
+                        :aria-selected="active_index === i"
+                        class="flex cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                        :class="
+                            active_index === i ? 'bg-gray-100 dark:bg-gray-700' : ''
+                        "
+                        @mousedown.prevent
+                        @click="selectProduct(p)"
                     >
-                        <img
-                            v-if="p.image_url"
-                            :src="p.image_url"
-                            alt=""
-                            class="h-full w-full object-cover"
+                        <div
+                            class="h-12 w-12 shrink-0 overflow-hidden rounded border border-gray-200 bg-gray-100 dark:border-gray-600 dark:bg-gray-900"
                         >
-                    </div>
-                    <span class="line-clamp-2 text-gray-900 dark:text-gray-100">{{
-                        p.title
-                    }}</span>
-                </li>
-            </ul>
+                            <img
+                                v-if="p.image_url"
+                                :src="p.image_url"
+                                alt=""
+                                class="h-full w-full object-cover"
+                            >
+                        </div>
+                        <span class="line-clamp-2 text-gray-900 dark:text-gray-100">{{
+                            p.title
+                        }}</span>
+                    </li>
+                </ul>
+                <div
+                    v-if="show_more_results"
+                    class="border-t border-gray-200 dark:border-gray-600"
+                >
+                    <RouterLink
+                        class="block px-3 py-2.5 text-center text-sm font-medium text-blue-600 hover:bg-gray-50 dark:text-blue-400 dark:hover:bg-gray-700/80"
+                        :to="{ name: 'search', query: { q: trimmed_query } }"
+                        @mousedown.prevent
+                        @click="closePanel"
+                    >
+                        More results
+                    </RouterLink>
+                </div>
+            </div>
         </div>
     </div>
 </template>
