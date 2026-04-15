@@ -1,3 +1,7 @@
+import { requestCatalogJson, CatalogApiError } from './catalogHttp';
+
+export { CatalogApiError };
+
 const base = '/api/catalog';
 
 export const CATEGORY_PATH_PREFIX = '/categories';
@@ -52,14 +56,7 @@ export type CategoryShowResponse = {
 };
 
 export async function fetchRootCategories(): Promise<CategoryItem[]> {
-    const res = await fetch(`${base}/categories`, {
-        headers: { Accept: 'application/json' },
-    });
-    if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error((err as { message?: string }).message ?? `HTTP ${res.status}`);
-    }
-    const body = (await res.json()) as CategoriesIndexResponse;
+    const body = await requestCatalogJson<CategoriesIndexResponse>(`${base}/categories`);
 
     return body.data;
 }
@@ -69,14 +66,7 @@ export async function fetchCategoryChildren(id: number): Promise<{
     breadcrumb: CategoryItem[];
     children: CategoryItem[];
 }> {
-    const res = await fetch(`${base}/categories/${id}`, {
-        headers: { Accept: 'application/json' },
-    });
-    if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error((err as { message?: string }).message ?? `HTTP ${res.status}`);
-    }
-    const body = (await res.json()) as CategoryShowResponse;
+    const body = await requestCatalogJson<CategoryShowResponse>(`${base}/categories/${id}`);
 
     return {
         parent: body.meta.parent,
@@ -103,15 +93,8 @@ export type CategoryProductsResponse = {
 
 export async function fetchCategoryProducts(category_id: number, page: number = 1): Promise<CategoryProductsResponse> {
     const params = new URLSearchParams({ page: String(page) });
-    const res = await fetch(`${base}/categories/${category_id}/products?${params}`, {
-        headers: { Accept: 'application/json' },
-    });
-    if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error((err as { message?: string }).message ?? `HTTP ${res.status}`);
-    }
 
-    return (await res.json()) as CategoryProductsResponse;
+    return requestCatalogJson<CategoryProductsResponse>(`${base}/categories/${category_id}/products?${params}`);
 }
 
 export type ProductSearchMeta = {
@@ -134,14 +117,8 @@ export async function searchProducts(
     options?: SearchProductsOptions,
 ): Promise<SearchProductsResponse> {
     const params = new URLSearchParams({ q, limit: String(limit) });
-    const res = await fetch(`${base}/search?${params}`, {
-        headers: { Accept: 'application/json' },
+
+    return requestCatalogJson<SearchProductsResponse>(`${base}/search?${params}`, {
         signal: options?.signal,
     });
-    if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error((err as { message?: string }).message ?? `HTTP ${res.status}`);
-    }
-
-    return (await res.json()) as SearchProductsResponse;
 }
