@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ProductListingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
 class ProductSearchController extends Controller
 {
@@ -13,6 +14,59 @@ class ProductSearchController extends Controller
         private ProductListingService $products,
     ) {}
 
+    #[OA\Get(
+        path: '/api/catalog/search',
+        operationId: 'catalogSearch',
+        tags: ['Catalog'],
+        parameters: [
+            new OA\Parameter(
+                name: 'q',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', maxLength: 100),
+            ),
+            new OA\Parameter(
+                name: 'limit',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(
+                    type: 'integer',
+                    minimum: 1,
+                    maximum: ProductListingService::SEARCH_MAX_LIMIT,
+                ),
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Search hits or empty list when query is missing or shorter than 2 characters',
+                content: new OA\JsonContent(
+                    required: ['data', 'meta'],
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(ref: '#/components/schemas/CatalogProduct'),
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            required: ['limit', 'query'],
+                            properties: [
+                                new OA\Property(property: 'limit', type: 'integer'),
+                                new OA\Property(property: 'query', type: 'string'),
+                            ],
+                            type: 'object',
+                        ),
+                    ],
+                ),
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation failed',
+                content: new OA\JsonContent(ref: '#/components/schemas/ApiError'),
+            ),
+        ],
+    )]
     public function index(Request $request): JsonResponse
     {
         $request->validate([

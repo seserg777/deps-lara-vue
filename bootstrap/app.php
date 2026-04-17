@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\CatalogApiException;
+use App\Http\Middleware\DenySwaggerInProduction;
 use App\Http\Responses\ApiJson;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,7 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'swagger.non_production' => DenySwaggerInProduction::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $e, Request $request) {
