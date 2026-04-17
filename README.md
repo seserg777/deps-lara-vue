@@ -41,6 +41,23 @@ php artisan boost:install
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
 
+## API documentation (Swagger / OpenAPI)
+
+The catalog JSON API is described with **OpenAPI 3** and served by [L5-Swagger](https://github.com/DarkaOnLine/L5-Swagger) (`darkaonline/l5-swagger`).
+
+- **Swagger UI:** [`/api/documentation`](http://localhost:8000/api/documentation) (adjust host/port to your app URL).
+- **OpenAPI document (JSON):** [`/docs`](http://localhost:8000/docs) — file name is configured as `api-docs.json` under `storage/api-docs/`.
+
+Regenerate the spec after changing PHP attributes or doc blocks:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+Optional: set `L5_SWAGGER_GENERATE_ALWAYS=true` in `.env` during development so the spec is rebuilt on each request (keep `false` in production).
+
+Swagger routes use the `swagger.non_production` middleware alias (`App\Http\Middleware\DenySwaggerInProduction`): in `APP_ENV=production` they return **404**, so the UI and raw spec are not exposed unless you remove that middleware from `config/l5-swagger.php`.
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
